@@ -1,9 +1,18 @@
-import { useState } from 'react'
+import './App.css'
+
+import { BrowserRouter } from 'react-router-dom'
+
+import AppRoutes from './components/routes/AppRoutes'
+import Layout from './components/wrappers/Layout'
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return null
+  return (
+    <BrowserRouter>
+      <Layout>
+        <AppRoutes />
+      </Layout>
+    </BrowserRouter>
+  )
 }
 
 export default App
