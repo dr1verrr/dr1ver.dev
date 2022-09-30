@@ -15,14 +15,20 @@ const sizes = {
   lg: 1200
 }
 
+const adaptiveSizes = {
+  md: `50vw, 50vw`,
+  lg: `70vw, 70vw`,
+  sm: `30vw, 30vw`
+}
+
 const useStyles = createUseStyles<'Container', ContainerProps, ColorScheme>({
   Container: ({ theme, maxWidth }) => ({
     margin: '0 auto',
     padding: [0, 'clamp(15px, 1.5vw, 1.5vw)'],
     ...(maxWidth && {
-      maxWidth: `clamp(${
-        typeof maxWidth === 'string' ? sizes[maxWidth] : maxWidth
-      }px, 50vw, 50vw)`
+      maxWidth: `clamp(${typeof maxWidth === 'string' ? sizes[maxWidth] : maxWidth}px, ${
+        typeof maxWidth === 'string' ? adaptiveSizes[maxWidth] : maxWidth
+      })`
     })
   })
 })

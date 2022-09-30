@@ -11,6 +11,7 @@ type Variants =
   | 'info.secondary'
   | 'action'
   | 'action.secondary'
+  | 'lightContrast'
 
 type HighlightedProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLSpanElement>,
@@ -31,7 +32,7 @@ const useStyles = createUseStyles<'Highlighted', StyledHighlightedProps, ColorSc
     background: theme.highlighted[variant].bg,
     color: theme.highlighted[variant].color,
     display: 'inline-block',
-    border: `2px solid ${theme.highlighted[variant].border}`,
+    border: `0.15em solid ${theme.highlighted[variant].border}`,
     wordBreak: 'break-all'
   })
 })
