@@ -21,8 +21,7 @@ const useStyles = createUseStyles<RuleNames, StackStyledProps>({
   Stack: ({ direction, spacing }) => ({
     display: 'flex',
     flexDirection: direction,
-    gap: spacing,
-    flexShrink: 0
+    gap: spacing
   })
 })
 

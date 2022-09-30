@@ -22,8 +22,8 @@ type TypographyProps = TypographyBase &
         adaptive?: boolean
         adaptiveProps?: {
           min: string | number
-          mid: string | number
-          max?: string | number
+          mid: string
+          max?: string
         }
       }
     | {
@@ -52,6 +52,10 @@ const useStyles = createUseStyles<RuleNames, TypographyProps, ColorScheme>({
     color: theme.color,
     display: 'inline-block',
     width: 'fit-content',
+    wordBreak: 'break-word',
+    hyphens: 'auto',
+    wordWrap: 'break-word',
+    overflowWrap: 'anywhere',
     ...(adaptive && { fontSize: getAdaptiveFontSize({ adaptiveProps }) })
   })
 })

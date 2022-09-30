@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { forwardRef } from 'react'
 import { createUseStyles } from 'react-jss'
 
@@ -10,33 +11,38 @@ interface TextFieldProps
   multiline?: boolean
 }
 
-type RuleNames = 'input'
+type RuleNames = 'TextField'
 
 const useStyles = createUseStyles<RuleNames, TextFieldProps, ColorScheme>({
-  input: ({ theme }) => ({
+  TextField: ({ theme }) => ({
     display: 'inline-block',
-    transition: 'background .2s ease',
-    //border: `2px solid ${theme.input.border.color}`,
-    fontSize: 'inherit',
+    transitionDuration: '.15s',
+    transitionProperty: 'background, border-color, color',
+    color: theme.color,
+    background: theme.bg,
     padding: 10,
-    //background: theme.input.bg,
-    borderRadius: 5,
-    //color: theme.input.text,
+    border: `2px solid ${theme.divider}`,
     outline: 'none',
-    '&:autofill': {
-      //background: theme.input.bg
+    '&:autofill': {},
+    '&:hover': {
+      borderColor: theme.color,
+      background: theme.hover
     },
-    '&:hover,  &:focus': {
-      //borderColor: theme.input.border.hover
+    '&:focus': {
+      borderColor: 'none',
+      background: theme.bg
     },
-    '&:invalid': {
+    '&:focus-visible': {
+      borderColor: theme.accent
+    },
+    '&:invalid:not(:required)': {
       borderColor: 'red'
     }
   })
 })
 
 const TextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, TextFieldProps>(
-  ({ sx, multiline = false, ...props }, ref) => {
+  ({ sx, multiline = false, className, ...props }, ref) => {
     const theme = useTheme()
     const classes = useStyles({ theme, ...props })
 
@@ -44,7 +50,7 @@ const TextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, TextFieldPr
       return (
         <textarea
           ref={ref as React.ForwardedRef<HTMLTextAreaElement>}
-          className={classes.input}
+          className={clsx(classes.TextField, className)}
           style={sx}
           {...props}
         />
@@ -54,7 +60,7 @@ const TextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, TextFieldPr
     return (
       <input
         ref={ref as React.ForwardedRef<HTMLInputElement>}
-        className={classes.input}
+        className={clsx(classes.TextField, className)}
         style={sx}
         {...props}
       />
