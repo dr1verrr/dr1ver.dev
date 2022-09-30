@@ -1,20 +1,22 @@
 import { lazy } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, RoutesProps } from 'react-router-dom'
 
 import { ROUTES } from './constants'
 
 const Main = lazy(() => import('@/views/Main'))
-const Projects = lazy(() => import('@/views/Projects'))
-const Skills = lazy(() => import('@/views/Skills'))
-const About = lazy(() => import('@/views/About'))
 
-export default function AppRoutes() {
+const routes = Object.keys(ROUTES).map(r => ({
+  element: ROUTES[r as keyof typeof ROUTES].element,
+  path: ROUTES[r as keyof typeof ROUTES].path
+}))
+
+export default function AppRoutes(props?: RoutesProps) {
   return (
-    <Routes>
+    <Routes {...props}>
       <Route index element={<Main />} />
-      <Route element={<About />} path={ROUTES.About} />
-      <Route element={<Skills />} path={ROUTES.Skills} />
-      <Route element={<Projects />} path={ROUTES.Projects} />
+      {routes.map(({ element: ViewComponent, path }, idx) => (
+        <Route key={idx} element={<ViewComponent />} path={path} />
+      ))}
     </Routes>
   )
 }
