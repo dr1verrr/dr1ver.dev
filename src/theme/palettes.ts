@@ -1,5 +1,15 @@
 const palettes = {
   light: {
+    lightContrast: {
+      bg: '#fff',
+      color: '#555',
+      border: '#dedede',
+      hover: {
+        bg: '#fff',
+        color: '#5D3FD3',
+        border: '#5D3FD3'
+      }
+    },
     action: {
       bg: '#5D3FD3',
       color: '#fff',
@@ -61,6 +71,16 @@ const palettes = {
     }
   },
   dark: {
+    lightContrast: {
+      bg: '#000',
+      color: '#ccc',
+      border: '#333',
+      hover: {
+        bg: '#fff',
+        color: '#5D3FD3',
+        border: '#5D3FD3'
+      }
+    },
     action: {
       bg: '#5D3FD3',
       color: '#fff',

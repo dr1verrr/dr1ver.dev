@@ -16,6 +16,7 @@ type PaletteScheme = {
   'action.secondary': Palette
   info: Palette
   'info.secondary': Palette
+  lightContrast: Palette
 }
 
 type ButtonScheme = {
@@ -52,4 +53,4 @@ type ColorScheme = {
   highlighted: PaletteScheme
 }
 
-export type { ColorScheme }
+export type { ButtonScheme, ColorScheme, Palette, PaletteScheme }
