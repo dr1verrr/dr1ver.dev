@@ -1,5 +1,5 @@
 import { HTMLMotionProps, motion } from 'framer-motion'
-import React, { memo, ReactNode, useRef } from 'react'
+import React, { memo, ReactNode, useEffect, useRef } from 'react'
 
 import IconGithub from '@/components/icons/Github'
 import {
@@ -411,6 +411,7 @@ const MemoizedProjectItem = memo(ProjectItem)
 
 const ProjectsList = ({ data }: { data: React.FC[] }) => {
   const listRef = useRef<HTMLDivElement>(null)
+  const loaderRef = useRef<HTMLDivElement>(null)
   const { Layout } = useLayoutContext()
   const { count, isLoading } = useInfiniteScroll({
     data,
@@ -419,6 +420,12 @@ const ProjectsList = ({ data }: { data: React.FC[] }) => {
     listRef,
     rootRef: Layout.ref
   })
+
+  useEffect(() => {
+    if (isLoading) {
+      loaderRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
+    }
+  }, [isLoading])
 
   return (
     <Box sx={{ paddingBottom: 'clamp(75px, 15vh, 15vh)' }}>
@@ -433,6 +440,7 @@ const ProjectsList = ({ data }: { data: React.FC[] }) => {
       </Stack>
       {count !== projects.length && isLoading && (
         <Stack
+          ref={loaderRef}
           sx={{
             justifyContent: 'center',
             alignItems: 'flex-start',
