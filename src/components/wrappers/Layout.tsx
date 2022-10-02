@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import React, {
   createContext,
   memo,
@@ -6,11 +7,11 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
   useRef,
   useState
 } from 'react'
 import { createTheming, createUseStyles, JssProvider } from 'react-jss'
+import { useLocation } from 'react-router-dom'
 
 import { Box, Button, Stack } from '@/components/shared'
 import useMediaQuery from '@/hooks/useMediaQuery'
@@ -22,7 +23,7 @@ import { ColorScheme } from '@/theme/types'
 import { loadState, saveState } from '@/utils/localStorage'
 import { rgba } from '@/utils/styles'
 
-import Animation from '../animation/first-load/Animation'
+import Animation from '../animation/first-load'
 import NavBar from '../layouts/NavBar'
 import Spinner from '../ui/lazyload/Spinner'
 import { getMode, getTheme } from './helpers'
@@ -53,6 +54,7 @@ const useStyles = createUseStyles<
     display: 'flex',
     flexWrap: 'wrap',
     width: '100%',
+    background: rgba(theme.divider, 0.1),
     position: 'relative',
     '& ::selection': {
       background: theme.color,
@@ -68,8 +70,9 @@ const useStyles = createUseStyles<
     position: 'relative',
     height: '100vh',
     fill: theme.color,
-    '&::-webkit-scrollbar-thumb': {
-      background: '#333'
+    '& *': {
+      scrollbarWidth: 'thin',
+      scrollbarColor: `${theme.palette.lightContrast.color} ${theme.divider}`
     }
   }),
   '@media (max-width: 760px)': {
@@ -114,6 +117,8 @@ type TLayoutContext = {
 const LayoutContext = createContext<TLayoutContext>({} as TLayoutContext)
 const useLayoutContext = () => useContext(LayoutContext)
 
+const MemoizedNavBar = memo(NavBar)
+
 const LayoutInner = ({
   children,
   refs
@@ -133,7 +138,7 @@ const LayoutInner = ({
 }) => {
   const theme = useTheme()
   const classes = useStyles({ theme })
-  const MemoizedNavBar = useMemo(() => <NavBar />, [])
+  const location = useLocation()
 
   const handlers = {
     skipNavigation: {
@@ -164,7 +169,7 @@ const LayoutInner = ({
           </Box>
         }
       >
-        {MemoizedNavBar}
+        <MemoizedNavBar />
       </Suspense>
       <div ref={refs.Layout.ref} className={classes.Layout}>
         <Button
@@ -189,9 +194,16 @@ const LayoutInner = ({
             </Box>
           }
         >
-          <main ref={refs.LayoutInner.ref} className={classes.LayoutInner}>
+          <motion.main
+            key={location.pathname}
+            ref={refs.LayoutInner.ref}
+            animate={{ translateX: 0 }}
+            className={classes.LayoutInner}
+            initial={{ translateX: 'clamp(-50px, -3.5%, -3.5%)' }}
+            transition={{ duration: 0.35 }}
+          >
             {children}
-          </main>
+          </motion.main>
         </Suspense>
       </div>
     </div>
@@ -199,6 +211,7 @@ const LayoutInner = ({
 }
 
 const MemoizedLayoutInner = memo(LayoutInner)
+const MemoizedAnimation = memo(Animation)
 
 type ThemeContext = {
   switchTheme: () => void
@@ -252,9 +265,8 @@ export default function Layout({ children }: LayoutProps) {
             ...refs
           }}
         >
+          <MemoizedAnimation />
           <MemoizedLayoutInner refs={refs}>
-            <Animation />
-
             <Stack style={{ display: animationPlayed ? 'flex' : 'none', width: '100%' }}>
               {children}
             </Stack>
