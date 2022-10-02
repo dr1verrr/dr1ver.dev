@@ -4,6 +4,7 @@ import { Route, Routes, RoutesProps } from 'react-router-dom'
 import { ROUTES } from './constants'
 
 const Main = lazy(() => import('@/views/Main'))
+const NotFound = lazy(() => import('@/views/NotFound'))
 
 const routes = Object.keys(ROUTES).map(r => ({
   element: ROUTES[r as keyof typeof ROUTES].element,
@@ -13,6 +14,7 @@ const routes = Object.keys(ROUTES).map(r => ({
 export default function AppRoutes(props?: RoutesProps) {
   return (
     <Routes {...props}>
+      <Route element={<NotFound />} path='*' />
       <Route index element={<Main />} />
       {routes.map(({ element: ViewComponent, path }, idx) => (
         <Route key={idx} element={<ViewComponent />} path={path} />
