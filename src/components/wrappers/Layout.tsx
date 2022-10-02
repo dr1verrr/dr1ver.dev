@@ -7,10 +7,12 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState
 } from 'react'
 import { createTheming, createUseStyles, JssProvider } from 'react-jss'
 
+import { Box, Button, Stack } from '@/components/shared'
 import useMediaQuery from '@/hooks/useMediaQuery'
 import { jss } from '@/services/jss'
 import { LocalStorageKey, LocalStorageKey as LSThemeKey } from '@/theme/constants'
@@ -20,8 +22,9 @@ import { ColorScheme } from '@/theme/types'
 import { loadState, saveState } from '@/utils/localStorage'
 import { rgba } from '@/utils/styles'
 
-import NavBar from '../layouts/NavBar/NavBar'
-import Button from '../shared/Button'
+import Animation from '../animation/first-load/Animation'
+import NavBar from '../layouts/NavBar'
+import Spinner from '../ui/lazyload/Spinner'
 import { getMode, getTheme } from './helpers'
 
 type LayoutProps = {
@@ -36,7 +39,11 @@ export { jss, ThemeContext }
 export { useLayoutContext }
 
 const useStyles = createUseStyles<
-  'Layout' | 'LayoutInner' | 'LayoutWrapper' | 'SkipNavigation',
+  | 'Layout'
+  | 'LayoutInner'
+  | 'LayoutWrapper'
+  | 'SkipNavigation'
+  | '@media (max-width: 760px)',
   unknown,
   ColorScheme
 >({
@@ -46,26 +53,30 @@ const useStyles = createUseStyles<
     display: 'flex',
     flexWrap: 'wrap',
     width: '100%',
+    position: 'relative',
     '& ::selection': {
       background: theme.color,
       color: theme.bg
-    },
-    '& :focus-visible:not(button)': {
-      outline: `2px solid #00FFFF`
     }
   }),
   LayoutWrapper: ({ theme }) => ({
+    fontSize: 'clamp(16px, 0.5vh + 0.5vw, 0.5vh + 0.5vw)',
     color: theme.color,
     background: theme.bg,
-    overflow: 'hidden',
     width: '100vw',
     display: 'flex',
+    position: 'relative',
     height: '100vh',
-    '@media (max-width: 760px)': {
-      flexDirection: 'column',
-      alignItems: 'self-start'
+    fill: theme.color,
+    '&::-webkit-scrollbar-thumb': {
+      background: '#333'
     }
   }),
+  '@media (max-width: 760px)': {
+    LayoutWrapper: {
+      flexDirection: 'column'
+    }
+  },
   LayoutInner: ({ theme }) => ({
     flex: 1,
     display: 'flex',
@@ -83,13 +94,43 @@ const useStyles = createUseStyles<
 })
 
 type TLayoutContext = {
-  switchTheme: () => void
+  actions: {
+    switchTheme: () => void
+    animationPlayed: {
+      set: React.Dispatch<React.SetStateAction<boolean>>
+    }
+  }
+  LayoutInner: {
+    ref: React.RefObject<HTMLDivElement>
+  }
+  LayoutWrapper: {
+    ref: React.RefObject<HTMLDivElement>
+  }
+  Layout: {
+    ref: React.RefObject<HTMLDivElement>
+  }
 }
 
 const LayoutContext = createContext<TLayoutContext>({} as TLayoutContext)
 const useLayoutContext = () => useContext(LayoutContext)
 
-const LayoutInner = ({ children }: { children?: ReactNode }) => {
+const LayoutInner = ({
+  children,
+  refs
+}: {
+  children?: ReactNode
+  refs: {
+    LayoutInner: {
+      ref: React.RefObject<HTMLDivElement>
+    }
+    LayoutWrapper: {
+      ref: React.RefObject<HTMLDivElement>
+    }
+    Layout: {
+      ref: React.RefObject<HTMLDivElement>
+    }
+  }
+}) => {
   const theme = useTheme()
   const classes = useStyles({ theme })
   const MemoizedNavBar = useMemo(() => <NavBar />, [])
@@ -109,21 +150,48 @@ const LayoutInner = ({ children }: { children?: ReactNode }) => {
   }
 
   return (
-    <div className={classes.LayoutWrapper}>
-      {MemoizedNavBar}
-      <div className={classes.Layout}>
-        <a
+    <div ref={refs.LayoutWrapper.ref} className={classes.LayoutWrapper}>
+      <Suspense
+        fallback={
+          <Box
+            sx={{
+              position: 'absolute',
+              left: 'clamp(14px, 0.75vw + 0.5vh, 0.75vw + 0.5vh)',
+              bottom: 'clamp(14px, 0.75vw + 0.5vh, 0.75vw + 0.5vh)'
+            }}
+          >
+            <Spinner />
+          </Box>
+        }
+      >
+        {MemoizedNavBar}
+      </Suspense>
+      <div ref={refs.Layout.ref} className={classes.Layout}>
+        <Button
           className={classes.SkipNavigation}
-          href='#'
           tabIndex={1000}
+          type='button'
+          variant='action'
           onClick={handlers.skipNavigation.onClick}
         >
-          <Button type='button' variant='action'>
-            Skip navigation
-          </Button>
-        </a>
-        <Suspense fallback={<div>Loading...</div>}>
-          <main className={classes.LayoutInner}>{children}</main>
+          Skip navigation
+        </Button>
+        <Suspense
+          fallback={
+            <Box
+              sx={{
+                position: 'absolute',
+                left: 'clamp(14px, 0.75vw + 0.5vh, 0.75vw + 0.5vh)',
+                bottom: 'clamp(14px, 0.75vw + 0.5vh, 0.75vw + 0.5vh)'
+              }}
+            >
+              <Spinner />
+            </Box>
+          }
+        >
+          <main ref={refs.LayoutInner.ref} className={classes.LayoutInner}>
+            {children}
+          </main>
         </Suspense>
       </div>
     </div>
@@ -137,12 +205,36 @@ type ThemeContext = {
 }
 
 export default function Layout({ children }: LayoutProps) {
+  const LayoutInnerEl = useRef<HTMLDivElement>(null)
+  const LayoutEl = useRef<HTMLDivElement>(null)
+  const LayoutWrapperEl = useRef<HTMLDivElement>(null)
+
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
   const [theme, setTheme] = useState<ColorScheme>(getTheme(loadState(LSThemeKey)))
+  const [animationPlayed, setAnimationPlayed] = useState(false)
 
   const switchTheme = useCallback(() => {
     setTheme(getTheme(theme.mode === 'dark' ? 'light' : 'dark'))
   }, [theme])
+
+  const actions = {
+    switchTheme,
+    animationPlayed: {
+      set: setAnimationPlayed
+    }
+  }
+
+  const refs = {
+    Layout: {
+      ref: LayoutEl
+    },
+    LayoutInner: {
+      ref: LayoutInnerEl
+    },
+    LayoutWrapper: {
+      ref: LayoutWrapperEl
+    }
+  }
 
   useEffect(() => {
     const mode = getMode(prefersDarkMode)
@@ -154,8 +246,19 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <JssProvider jss={jss}>
       <ThemeProvider theme={theme}>
-        <LayoutContext.Provider value={{ switchTheme }}>
-          <MemoizedLayoutInner>{children}</MemoizedLayoutInner>
+        <LayoutContext.Provider
+          value={{
+            actions,
+            ...refs
+          }}
+        >
+          <MemoizedLayoutInner refs={refs}>
+            <Animation />
+
+            <Stack style={{ display: animationPlayed ? 'flex' : 'none', width: '100%' }}>
+              {children}
+            </Stack>
+          </MemoizedLayoutInner>
         </LayoutContext.Provider>
       </ThemeProvider>
     </JssProvider>
