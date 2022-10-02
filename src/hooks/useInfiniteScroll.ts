@@ -20,6 +20,7 @@ const useInfiniteScroll = <T extends HTMLElement>({
   const [count, setCount] = useState(INITIAL_COUNT)
   const [isLoading, setLoading] = useState(false)
   const isMounted = useRef(false)
+  const [listHeight, setListHeight] = useState<number>()
   const timeout = useRef<NodeJS.Timer>()
 
   const getLoadMoreFn = () => {
@@ -27,8 +28,21 @@ const useInfiniteScroll = <T extends HTMLElement>({
       return () => {
         const list = listRef.current
         const root = rootRef.current
-        if (root && root?.offsetHeight && root?.scrollTop && list?.scrollHeight) {
-          if (root?.offsetHeight + root?.scrollTop >= list?.scrollHeight) {
+
+        const distanceToTopFromList =
+          list?.getBoundingClientRect().top! + root?.scrollTop!
+
+        if (
+          root &&
+          list &&
+          root?.offsetHeight >= 0 &&
+          root?.scrollTop >= 0 &&
+          list?.scrollHeight >= 0
+        ) {
+          const calculatedScrollHeight =
+            root?.offsetHeight + root?.scrollTop - distanceToTopFromList
+
+          if (calculatedScrollHeight >= list?.scrollHeight) {
             setLoading(true)
           }
         }
@@ -65,7 +79,15 @@ const useInfiniteScroll = <T extends HTMLElement>({
     }
 
     if (!isMounted.current) {
-      loadMore()
+      if (listRef) {
+        const list = listRef.current!
+
+        const ro = new ResizeObserver(entries => {
+          setListHeight(entries[0].target.scrollHeight)
+        })
+
+        ro.observe(list)
+      }
       if (rootRef) {
         const root = rootRef.current
         root?.addEventListener('scroll', handler)
@@ -95,6 +117,12 @@ const useInfiniteScroll = <T extends HTMLElement>({
       window.removeEventListener('scroll', handler)
     }
   }, [isLoading])
+
+  useEffect(() => {
+    if (listHeight && listHeight > 0) {
+      loadMore()
+    }
+  }, [listHeight])
 
   return { isLoading, count }
 }
