@@ -21,6 +21,7 @@ const useInfiniteScroll = <T extends HTMLElement>({
   const [isLoading, setLoading] = useState(false)
   const isMounted = useRef(false)
   const [listHeight, setListHeight] = useState<number>()
+  const resizeObserver = useRef<ResizeObserver>()
   const timeout = useRef<NodeJS.Timer>()
 
   const getLoadMoreFn = () => {
@@ -74,30 +75,6 @@ const useInfiniteScroll = <T extends HTMLElement>({
   const loadMore = getLoadMoreFn()
 
   useEffect(() => {
-    const handler = (e: Event) => {
-      loadMore()
-    }
-
-    if (!isMounted.current) {
-      if (listRef) {
-        const list = listRef.current!
-
-        const ro = new ResizeObserver(entries => {
-          setListHeight(entries[0].target.scrollHeight)
-        })
-
-        ro.observe(list)
-      }
-      if (rootRef) {
-        const root = rootRef.current
-        root?.addEventListener('scroll', handler)
-      } else {
-        window.addEventListener('scroll', handler)
-      }
-
-      isMounted.current = true
-    }
-
     if (!isLoading) return
 
     clearTimeout(timeout.current)
@@ -109,14 +86,43 @@ const useInfiniteScroll = <T extends HTMLElement>({
       }
       setLoading(false)
     }, 250)
+  }, [isLoading])
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      loadMore()
+    }
+
+    const list = listRef?.current
+    const root = rootRef?.current
+
+    if (!isMounted.current) {
+      if (listRef && list) {
+        const ro = new ResizeObserver(entries => {
+          setListHeight(entries[0].target.scrollHeight)
+        })
+
+        resizeObserver.current = ro
+        ro.observe(list)
+      }
+      if (rootRef && root) {
+        root.addEventListener('scroll', handler)
+      } else {
+        window.addEventListener('scroll', handler)
+      }
+
+      isMounted.current = true
+    }
 
     return () => {
-      if (rootRef) {
-        return rootRef.current?.removeEventListener('scroll', handler)
+      if (listRef && resizeObserver.current) {
+        resizeObserver.current.disconnect()
       }
-      window.removeEventListener('scroll', handler)
+      if (rootRef && root) {
+        root.removeEventListener('scroll', handler)
+      }
     }
-  }, [isLoading])
+  }, [listRef, rootRef])
 
   useEffect(() => {
     if (listHeight && listHeight > 0) {
