@@ -24,7 +24,7 @@ const useStyles = createUseStyles<
   ColorScheme
 >({
   Wrapper: ({ theme, animationType }) => ({
-    transitionProperty: 'translate',
+    transitionProperty: 'translate, opacity, scale',
     transitionDuration: '.5s',
     position: 'fixed',
     background: theme.bg,
@@ -40,7 +40,8 @@ const useStyles = createUseStyles<
     userSelect: 'none',
     color: theme.color,
     ...(animationType === 'second' && {
-      translate: '100% 0'
+      translate: '100% 0',
+      opacity: 0
     })
   }),
   Inner: ({ theme }) => ({
@@ -89,7 +90,7 @@ const useStyles = createUseStyles<
     background: '#111',
     justifyContent: 'center',
     ...(animationType === 'first' && {
-      animation: '$FirstAnimation 0.75s ease'
+      animation: '$FirstAnimation .75s ease'
     })
   }),
   '@media (max-width: 670px)': {
