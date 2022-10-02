@@ -1,5 +1,5 @@
 import { HTMLMotionProps, motion } from 'framer-motion'
-import React, { memo, ReactNode, useEffect, useRef } from 'react'
+import React, { memo, ReactNode, useRef } from 'react'
 
 import IconGithub from '@/components/icons/Github'
 import {
@@ -413,6 +413,7 @@ const ProjectsList = ({ data }: { data: React.FC[] }) => {
   const listRef = useRef<HTMLDivElement>(null)
   const loaderRef = useRef<HTMLDivElement>(null)
   const { Layout } = useLayoutContext()
+  //const isListEnd = useRef(false)
   const { count, isLoading } = useInfiniteScroll({
     data,
     increment: 1,
@@ -421,18 +422,38 @@ const ProjectsList = ({ data }: { data: React.FC[] }) => {
     rootRef: Layout.ref
   })
 
-  useEffect(() => {
-    if (isLoading) {
-      loaderRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
-    }
-  }, [isLoading])
+  //useEffect(() => {
+  //  if (isListEnd.current) return
+  //  const list = listRef.current!
+  //  const loader = loaderRef.current!
+  //  const lastListElement = list.lastElementChild!
+  //  const isEnd = list.children.length === data.length
+
+  //  if (isEnd) {
+  //    isListEnd.current = true
+  //  }
+
+  //  if (isLoading) {
+  //    return scrollToElement(loader, { block: 'end' })
+  //  }
+
+  //  scrollToElement(lastListElement, { block: 'start' })
+  //}, [isLoading])
 
   return (
     <Box sx={{ paddingBottom: 'clamp(75px, 15vh, 15vh)' }}>
-      <Stack ref={listRef} direction='column' spacing='clamp(100px, 15vh, 15vh)'>
+      <Stack
+        ref={listRef}
+        direction='column'
+        spacing='clamp(100px, 15vh, 15vh)'
+        sx={{ scrollMargin: 'clamp(100px, 15vh, 15vh)' }}
+      >
         {data.slice(0, count).map((Proj, idx) => {
           return (
-            <MemoizedProjectItem key={idx}>
+            <MemoizedProjectItem
+              key={idx}
+              style={{ scrollMargin: 'clamp(100px, 15vh, 15vh)' }}
+            >
               <Proj />
             </MemoizedProjectItem>
           )

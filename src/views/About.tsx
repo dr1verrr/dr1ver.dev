@@ -1,60 +1,51 @@
-import Box from '@/components/shared/Box'
-import Button from '@/components/shared/Button'
+import { NavLink } from 'react-router-dom'
+
+import { ROUTES } from '@/components/routes/constants'
+import UIButton from '@/components/shared/Button'
 import Container from '@/components/shared/Container'
-import Highlighted from '@/components/shared/Highlighted'
 import Stack from '@/components/shared/Stack'
-import Typography from '@/components/shared/Typography'
-import { useLayoutContext } from '@/components/wrappers/Layout'
+import UITypography from '@/components/shared/Typography'
+import adaptive from '@/hoc/adaptive'
+
+const Typography = adaptive(UITypography)
+const Button = adaptive(UIButton)
 
 export default function About() {
-  const { switchTheme } = useLayoutContext()
   return (
-    <Container maxWidth='md'>
-      <Box sx={{ paddingTop: 50 }}>
-        <Stack spacing={25} sx={{ flexWrap: 'wrap' }}>
-          <Box>
-            <Typography
-              sx={{ fontSize: `clamp(24px, 2vw + 2vh, 2vw + 2vh)` }}
-              variant='h1'
-            >
-              Highlighted
+    <Container
+      maxWidth='lg'
+      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+    >
+      <Container maxWidth='md'>
+        <Stack
+          direction='column'
+          spacing='clamp(20px, 2vh, 2vh)'
+          sx={{ padding: 'clamp(50px, 3vw + 3vh, 3vw + 3vh) 0' }}
+        >
+          <Typography size='lg' sx={{ margin: 0, fontWeight: 300 }} variant='h2'>
+            About me
+          </Typography>
+          <Stack
+            direction='column'
+            spacing='clamp(20px, 2vh, 2vh)'
+            sx={{ lineHeight: 2 }}
+          >
+            <Typography element='p'>
+              I'm a Front-End Developer located in Saint Petersburg. Creating scalable,
+              performance optimized web applications and some other cool stuff for web
+              with good UX and modern standards.
             </Typography>
-            <Stack spacing={10} sx={{ flexWrap: 'wrap' }}>
-              <Highlighted variant='primary'>I am Highlighted.primary</Highlighted>
-              <Highlighted variant='secondary'>I am Highlighted.secondary</Highlighted>
-              <Highlighted variant='action'>I am Highlighted.action</Highlighted>
-              <Highlighted variant='action.secondary'>
-                I am Highlighted.action.secondary
-              </Highlighted>
-              <Highlighted variant='info'>I am Highlighted.info</Highlighted>
-              <Highlighted variant='info.secondary'>
-                I am Highlighted.info.secondary
-              </Highlighted>
-            </Stack>
-          </Box>
-          <Box>
-            <Typography
-              sx={{ fontSize: `clamp(24px, 2vw + 2vh, 2vw + 2vh)` }}
-              variant='h1'
-            >
-              Buttons
+            <Typography element='p'>Well-organized, punctual person.</Typography>
+            <Typography element='p'>
+              Interested in the entire frontend spectrum and working on ambitious projects
+              with positive people.
             </Typography>
-            <Stack direction='column' spacing={10}>
-              <Button onClick={switchTheme}>Switch theme</Button>
-              <Stack spacing={10}>
-                <Button variant='primary'>Primary</Button>
-                <Button variant='secondary'>Secondary</Button>
-                <Button variant='action'>Action</Button>
-                <Button variant='info'>Info</Button>
-              </Stack>
-              <Stack spacing={10}>
-                <Button variant='action.secondary'>Action.secondary</Button>
-                <Button variant='info.secondary'>Info.secondary</Button>
-              </Stack>
-            </Stack>
-          </Box>
+            <NavLink style={{ maxWidth: 'fit-content' }} to={ROUTES.Contact.path}>
+              <Button variant='action.secondary'>Get Started</Button>
+            </NavLink>
+          </Stack>
         </Stack>
-      </Box>
+      </Container>
     </Container>
   )
 }
