@@ -5,47 +5,53 @@ module.exports = {
     ecmaVersion: 2020,
     sourceType: 'module',
     ecmaFeatures: {
-      jsx: true,
-    },
+      jsx: true
+    }
   },
   settings: {
     react: {
-      version: 'detect',
+      version: 'detect'
     },
     'import/resolver': {
       node: {
         paths: ['src'],
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
-      },
-    },
+        extensions: ['.js', '.jsx', '.ts', '.tsx']
+      }
+    }
   },
   env: {
     browser: true,
     amd: true,
-    node: true,
+    node: true
   },
-  extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:jsx-a11y/recommended',
-    'plugin:prettier/recommended', // Make sure this is always the last element in the array.
-  ],
-  plugins: ['simple-import-sort', 'prettier'],
+  extends: ['prettier'],
+  plugins: ['react', 'prettier', 'unused-imports', 'simple-import-sort'],
   rules: {
-    'prettier/prettier': ['error', {}, { usePrettierrc: true }],
-    'react/react-in-jsx-scope': 'off',
     'jsx-a11y/accessible-emoji': 'off',
     'react/prop-types': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
-    'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
-    'jsx-a11y/anchor-is-valid': [
-      'error',
+    'react/jsx-sort-props': [
+      'warn',
       {
-        components: ['Link'],
-        specialLink: ['hrefLeft', 'hrefRight'],
-        aspects: ['invalidHref', 'preferButton'],
-      },
+        callbacksLast: true,
+        shorthandFirst: true,
+        noSortAlphabetically: false,
+        reservedFirst: true
+      }
     ],
-  },
-};
+    'simple-import-sort/imports': 'warn',
+    'unused-imports/no-unused-imports': 'warn',
+    'prettier/prettier': ['warn', { endOfLine: 'auto' }, { usePrettierrc: true }],
+    'import/first': 'off',
+    'no-fallthrough': 'off',
+    'no-unused-vars': 'warn',
+    'no-console': 'warn',
+    'jsx-quotes': 'off',
+    'prefer-const': 'off',
+    'no-tabs': 'error',
+    curly: 'off',
+    'react/react-in-jsx-scope': 'off',
+    'no-mixed-spaces-and-tabs': 'error'
+  }
+}
