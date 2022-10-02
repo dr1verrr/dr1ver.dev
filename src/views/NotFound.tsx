@@ -71,7 +71,7 @@ export default function NotFound() {
               size='md'
               variant='secondary'
               onClick={() => {
-                navigate(-1)
+                navigate('/')
               }}
             >
               Go back
