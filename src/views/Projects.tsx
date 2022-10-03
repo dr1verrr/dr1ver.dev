@@ -15,7 +15,7 @@ import SpinnerCircle from '@/components/spinners/SpinnerCircle'
 import List from '@/components/ui/List'
 import { useLayoutContext } from '@/components/wrappers/Layout'
 import { adaptive } from '@/hoc'
-import useInfiniteScroll from '@/hooks/useInfiniteScroll'
+import useInfiniteScroll from '@/hooks/useInfiniteScroll/useInfiniteScroll'
 import { useTheme } from '@/theme/hooks'
 
 const Typography = adaptive(UITypography)
@@ -244,9 +244,13 @@ const SpeedTyperDev = () => {
               loop
               muted
               playsInline
-              poster='https://repository-images.githubusercontent.com/526196394/f64a3c75-d987-4a68-9e1d-f8ec1248d26a'
               src='https://user-images.githubusercontent.com/67706933/190857521-fa1d4098-30c0-4a6e-9d13-ef45ac70c1e5.mp4'
-              style={{ maxWidth: '100%', height: 'auto', minWidth: 0 }}
+              style={{
+                maxWidth: '100%',
+                height: 'auto',
+                minWidth: 0,
+                minHeight: 'clamp(350px, 10vh, 10vh)'
+              }}
             ></video>
           </MediaContent>
         </Box>
@@ -320,7 +324,12 @@ const ReactHookManager = () => {
             muted
             playsInline
             src='https://user-images.githubusercontent.com/67706933/191988615-9c17a9b7-9055-495e-a7bb-c29c4b75ebe4.mp4'
-            style={{ maxWidth: '100%', height: 'auto', minWidth: 0 }}
+            style={{
+              maxWidth: '100%',
+              height: 'auto',
+              minWidth: 0,
+              minHeight: 'clamp(350px, 10vh, 10vh)'
+            }}
           ></video>
         </MediaContent>
       </Box>
@@ -381,9 +390,13 @@ const DriverShop = () => {
             loop
             muted
             playsInline
-            poster='https://repository-images.githubusercontent.com/417917436/0154a5f8-2eb4-4a3e-bb12-53c85ce0c6ac'
             src='https://user-images.githubusercontent.com/67706933/191988779-f0bbd2ae-15b8-4215-be3f-5d577e265572.mp4'
-            style={{ maxWidth: '100%', height: 'auto', minWidth: 0 }}
+            style={{
+              maxWidth: '100%',
+              height: 'auto',
+              minWidth: 0,
+              minHeight: 'clamp(350px, 10vh, 10vh)'
+            }}
           ></video>
         </MediaContent>
       </Box>
@@ -411,34 +424,15 @@ const MemoizedProjectItem = memo(ProjectItem)
 
 const ProjectsList = ({ data }: { data: React.FC[] }) => {
   const listRef = useRef<HTMLDivElement>(null)
-  const loaderRef = useRef<HTMLDivElement>(null)
   const { Layout } = useLayoutContext()
-  //const isListEnd = useRef(false)
   const { count, isLoading } = useInfiniteScroll({
     data,
     increment: 1,
     initialCount: 1,
     listRef,
-    rootRef: Layout.ref
+    rootRef: Layout.ref,
+    scrollMargin: '8.5%'
   })
-
-  //useEffect(() => {
-  //  if (isListEnd.current) return
-  //  const list = listRef.current!
-  //  const loader = loaderRef.current!
-  //  const lastListElement = list.lastElementChild!
-  //  const isEnd = list.children.length === data.length
-
-  //  if (isEnd) {
-  //    isListEnd.current = true
-  //  }
-
-  //  if (isLoading) {
-  //    return scrollToElement(loader, { block: 'end' })
-  //  }
-
-  //  scrollToElement(lastListElement, { block: 'start' })
-  //}, [isLoading])
 
   return (
     <Box sx={{ paddingBottom: 'clamp(75px, 15vh, 15vh)' }}>
@@ -461,7 +455,6 @@ const ProjectsList = ({ data }: { data: React.FC[] }) => {
       </Stack>
       {count !== projects.length && isLoading && (
         <Stack
-          ref={loaderRef}
           sx={{
             justifyContent: 'center',
             alignItems: 'flex-start',
