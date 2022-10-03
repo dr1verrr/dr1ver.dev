@@ -15,7 +15,7 @@ import SpinnerCircle from '@/components/spinners/SpinnerCircle'
 import List from '@/components/ui/List'
 import { useLayoutContext } from '@/components/wrappers/Layout'
 import { adaptive } from '@/hoc'
-import useInfiniteScroll from '@/hooks/useInfiniteScroll/useInfiniteScroll'
+import { useInfiniteScroll } from '@/hooks'
 import { useTheme } from '@/theme/hooks'
 
 const Typography = adaptive(UITypography)
