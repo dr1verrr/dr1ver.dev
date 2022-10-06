@@ -70,7 +70,6 @@ export default function Modal({
   CSSTransitionProps,
   ModalProps
 }: ModalProps) {
-  const nodeRef = useRef(null)
   const modalContentRef = useRef<HTMLDivElement>(null)
   const theme = useTheme()
   const classes = useStyles({ theme })
@@ -86,6 +85,7 @@ export default function Modal({
 
   return (
     <ReactPortal wrapperId='modals'>
+      {/*// @ts-ignore: Unreachable code error*/}
       <CSSTransition
         unmountOnExit
         classNames={{
@@ -94,11 +94,10 @@ export default function Modal({
           enterDone: classes.Enter
         }}
         in={open}
-        nodeRef={nodeRef}
         timeout={{ appear: 150, exit: 100 }}
         {...CSSTransitionProps}
       >
-        <div ref={nodeRef} className={classes.Modal} {...ModalProps}>
+        <div className={classes.Modal} {...ModalProps}>
           <div className={classes.BackdropClose} onClick={handleClose}></div>
           <div ref={modalContentRef} className={classes.ModalContent}>
             {children(handleClose)}
