@@ -94,6 +94,7 @@ const useStyles = createUseStyles<
     zIndex: 2
   }),
   SkipNavigation: ({ theme }) => ({
+    zIndex: 500,
     opacity: 0,
     pointerEvents: 'none',
     position: 'absolute',

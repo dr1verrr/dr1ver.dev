@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { createUseStyles } from 'react-jss'
 
 import ReactPortal from '@/components/helpers/ReactPortal'
@@ -9,7 +10,19 @@ import { rgba } from '@/utils/styles'
 import { CONSTANTS } from './FullscreenMediaBackground'
 import { useProjectContext } from './Project'
 
-const useStyles = createUseStyles<'MediaBackground', unknown, ColorScheme>(theme => ({
+const useStyles = createUseStyles<
+  'MediaBackground' | '@keyframes rotate',
+  unknown,
+  ColorScheme
+>(theme => ({
+  '@keyframes rotate': {
+    '0%': {
+      rotate: '0deg'
+    },
+    '100%': {
+      rotate: '360deg'
+    }
+  },
   MediaBackground: {
     position: 'absolute',
     top: 0,
@@ -21,11 +34,11 @@ const useStyles = createUseStyles<'MediaBackground', unknown, ColorScheme>(theme
     zIndex: 0,
     pointerEvents: 'none',
     '& > video, img': {
-      filter: 'blur(clamp(12px, 0.25vw + 0.25vh, 0.25vw + 0.25vh))',
+      filter: 'blur(clamp(10px, 0.1vw + 0.1vh, 0.1vw + 0.1vh))',
       objectFit: 'cover',
       width: '100% !important',
       height: '100% !important',
-      scale: 1.2
+      animation: '$rotate 60s ease infinite'
     },
     '&:after': {
       position: 'absolute',
@@ -38,7 +51,7 @@ const useStyles = createUseStyles<'MediaBackground', unknown, ColorScheme>(theme
       bottom: 0,
       width: '100%',
       height: '100%',
-      background: rgba(theme.bg, 0.89)
+      background: rgba(theme.bg, 0.8)
     }
   }
 }))
@@ -52,9 +65,16 @@ const MediaDesktop = ({ MediaComponent }: { MediaComponent: React.ComponentType 
     <>
       <ReactPortal wrapperId={CONSTANTS.ContainerBackground.backgroundComponentId}>
         {inView && (
-          <Box className={classes.MediaBackground}>
-            <MediaComponent />
-          </Box>
+          <motion.div
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }}
+            transition={{ duration: 0.35, delay: 0.05 }}
+          >
+            <Box className={classes.MediaBackground}>
+              <MediaComponent />
+            </Box>
+          </motion.div>
         )}
       </ReactPortal>
       <MediaComponent />

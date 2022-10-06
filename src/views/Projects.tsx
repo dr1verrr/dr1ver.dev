@@ -9,6 +9,8 @@ import Project from '@/components/work/projects'
 import { ProjectProps } from '@/components/work/projects/Project'
 import data_projects from '@/data/work/projects'
 import { adaptive } from '@/hoc'
+import { useTheme } from '@/theme/hooks'
+import { rgba } from '@/utils/styles'
 
 const Typography = adaptive(UITypography)
 
@@ -32,6 +34,8 @@ const FullscreenMediaBackground = lazy(
 )
 
 export default function Projects() {
+  const theme = useTheme()
+
   return (
     <>
       <MediaQuery query='(max-width: 460px)' showOnQuery={false}>
@@ -43,7 +47,11 @@ export default function Projects() {
           width: '100%',
           position: 'relative',
           zIndex: 50,
-          mixBlendMode: 'difference'
+          background: rgba(theme.bg, 0.5),
+          padding: '0 clamp(15px, 2vw + 2vh, 2vw + 2vh)',
+          border: `0.1em solid ${theme.divider}`,
+          borderTop: 0,
+          borderBottom: 0
         }}
       >
         <Typography
