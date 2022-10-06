@@ -2,13 +2,14 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { getScrollMargin } from './utils'
 
-type useInfiniteScrollProps<T extends HTMLElement> = {
+export type UseInfiniteScrollProps<T extends HTMLElement> = {
   data: any[]
   increment: number
   initialCount: number
   listRef?: React.RefObject<T>
   rootRef?: React.RefObject<T>
   scrollMargin?: number | `${number}%`
+  delay?: number
 }
 
 type Params = {
@@ -23,8 +24,9 @@ const useInfiniteScroll = <T extends HTMLElement>({
   initialCount = 1,
   listRef,
   rootRef,
+  delay = 0,
   scrollMargin
-}: useInfiniteScrollProps<T>) => {
+}: UseInfiniteScrollProps<T>) => {
   const [count, setCount] = useState(initialCount)
   const [isLoading, setLoading] = useState(false)
   const timeout = useRef<NodeJS.Timer>()
@@ -32,43 +34,93 @@ const useInfiniteScroll = <T extends HTMLElement>({
   const [listHeightResized, setListHeightResized] = useState<number>()
   const [params, setParams] = useState<Params>()
 
-  const loadMore = useCallback(() => {
+  const getIsEndOfList = useCallback(() => {
     if (params) {
       const { list, root } = params
 
-      const distanceToTopFromList = list.getBoundingClientRect().top + root.scrollTop
-      const calculatedScrollHeight =
-        root.clientHeight + root.scrollTop - distanceToTopFromList
+      if (list !== root) {
+        const distanceToTopFromList = list.getBoundingClientRect().top + root.scrollTop
+        const calculatedScrollHeight =
+          root.clientHeight + root.scrollTop - distanceToTopFromList
 
+        let margin = 0
+
+        if (scrollMargin) {
+          margin = getScrollMargin(scrollMargin, list)
+        }
+
+        if (calculatedScrollHeight >= list.scrollHeight - margin) {
+          return true
+        }
+        return false
+      }
+
+      const calculatedScrollHeight = list.scrollTop + list.clientHeight
       let margin = 0
 
       if (scrollMargin) {
         margin = getScrollMargin(scrollMargin, list)
       }
 
+      console.log('margin', margin)
+
       if (calculatedScrollHeight >= list.scrollHeight - margin) {
-        setLoading(true)
+        return true
       }
+      return false
     }
   }, [params])
 
-  useEffect(() => {
-    if (!isLoading) return
+  const loadMore = () => {
+    setLoading(true)
+  }
 
-    clearTimeout(timeout.current)
-    timeout.current = setTimeout(() => {
-      if (count + increment >= data.length) {
-        setCount(data.length)
-      } else {
-        setCount(c => c + increment)
-      }
-      setLoading(false)
-    }, 200)
-
-    return () => {
-      clearTimeout(timeout.current)
+  const handler = () => {
+    const isEndOfList = getIsEndOfList()
+    if (isEndOfList) {
+      loadMore()
     }
-  }, [isLoading])
+  }
+
+  const calculateCount = () => {
+    if (count + increment >= data.length) {
+      return data.length
+    } else {
+      return count + increment
+    }
+  }
+
+  const onLoading = (cb: (...args: any[]) => void) => {
+    if (!isLoading) return
+    cb()
+  }
+
+  const updateCountIfHasMore = () => {
+    const count = calculateCount()
+    if (count) {
+      setCount(count)
+    }
+  }
+
+  useEffect(
+    delay
+      ? () => {
+          clearTimeout(timeout.current)
+          timeout.current = setTimeout(() => {
+            onLoading(updateCountIfHasMore)
+            setLoading(false)
+          }, delay)
+
+          return () => {
+            clearTimeout(timeout.current)
+          }
+        }
+      : () => {
+          onLoading(updateCountIfHasMore)
+          setLoading(false)
+        },
+    [isLoading]
+  )
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver(entries => {
@@ -77,8 +129,17 @@ const useInfiniteScroll = <T extends HTMLElement>({
       setListHeightResized(newListHeight)
     })
 
-    const root = rootRef?.current || document.documentElement
     const list = listRef?.current || document.documentElement
+
+    const getRoot = () => {
+      const root = rootRef?.current
+      if (!root) {
+        return list
+      }
+      return root
+    }
+
+    const root = getRoot()
 
     setParams({
       root,
@@ -89,7 +150,6 @@ const useInfiniteScroll = <T extends HTMLElement>({
 
   useEffect(() => {
     if (params) {
-      const handler = loadMore
       const { resizeObserver, list, root } = params
       resizeObserver.observe(list)
       root.addEventListener('scroll', handler)
@@ -104,7 +164,7 @@ const useInfiniteScroll = <T extends HTMLElement>({
 
   useEffect(() => {
     if (listHeightResized && listHeight.current) {
-      loadMore()
+      handler()
     }
   }, [listHeightResized])
 
