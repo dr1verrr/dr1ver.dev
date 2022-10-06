@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import React, {
   createContext,
   memo,
@@ -11,7 +10,6 @@ import React, {
   useState
 } from 'react'
 import { createTheming, createUseStyles, JssProvider } from 'react-jss'
-import { useLocation } from 'react-router-dom'
 
 import { Box, Button, Stack } from '@/components/shared'
 import useMediaQuery from '@/hooks/useMediaQuery'
@@ -23,10 +21,11 @@ import { ColorScheme } from '@/theme/types'
 import { loadState, saveState } from '@/utils/localStorage'
 import { rgba } from '@/utils/styles'
 
-import Animation from '../animation/first-load'
-import NavBar from '../layouts/NavBar'
-import Spinner from '../ui/lazyload/Spinner'
-import { getMode, getTheme } from './helpers'
+import Animation from '../../animation/first-load'
+import NavBar from '../../layouts/NavBar'
+import Spinner from '../../ui/lazyload/Spinner'
+import { getMode, getTheme } from '../helpers'
+import { LAYOUT_CONSTANTS } from './constants'
 
 type LayoutProps = {
   children?: React.ReactNode
@@ -49,11 +48,13 @@ const useStyles = createUseStyles<
   ColorScheme
 >({
   Layout: ({ theme }) => ({
-    overflow: 'auto',
     flex: 1,
+    zIndex: 3,
     display: 'flex',
     flexWrap: 'wrap',
     width: '100%',
+    height: '100%',
+    overflow: 'hidden',
     background: rgba(theme.divider, 0.1),
     position: 'relative',
     '& ::selection': {
@@ -67,8 +68,11 @@ const useStyles = createUseStyles<
     background: theme.bg,
     width: '100vw',
     display: 'flex',
+    overflow: 'hidden',
     position: 'relative',
     height: '100vh',
+    maxHeight: '100vh',
+    maxWidth: '100vw',
     fill: theme.color,
     '& *': {
       scrollbarWidth: 'thin',
@@ -81,9 +85,13 @@ const useStyles = createUseStyles<
     }
   },
   LayoutInner: ({ theme }) => ({
-    flex: 1,
+    width: 'inherit',
+    height: 'inherit',
+    position: 'relative',
+    overflow: 'auto',
     display: 'flex',
-    background: rgba(theme.divider, 0.1)
+    flexWrap: 'wrap',
+    zIndex: 2
   }),
   SkipNavigation: ({ theme }) => ({
     opacity: 0,
@@ -138,7 +146,6 @@ const LayoutInner = ({
 }) => {
   const theme = useTheme()
   const classes = useStyles({ theme })
-  const location = useLocation()
 
   const handlers = {
     skipNavigation: {
@@ -155,7 +162,11 @@ const LayoutInner = ({
   }
 
   return (
-    <div ref={refs.LayoutWrapper.ref} className={classes.LayoutWrapper}>
+    <div
+      ref={refs.LayoutWrapper.ref}
+      className={classes.LayoutWrapper}
+      id={LAYOUT_CONSTANTS.LayoutWrapperId}
+    >
       <Suspense
         fallback={
           <Box
@@ -171,7 +182,11 @@ const LayoutInner = ({
       >
         <MemoizedNavBar />
       </Suspense>
-      <div ref={refs.Layout.ref} className={classes.Layout}>
+      <div
+        ref={refs.Layout.ref}
+        className={classes.Layout}
+        id={LAYOUT_CONSTANTS.LayoutId}
+      >
         <Button
           className={classes.SkipNavigation}
           tabIndex={1000}
@@ -194,16 +209,13 @@ const LayoutInner = ({
             </Box>
           }
         >
-          <motion.main
-            key={location.pathname}
+          <main
             ref={refs.LayoutInner.ref}
-            animate={{ translateX: 0 }}
             className={classes.LayoutInner}
-            initial={{ translateX: 'clamp(-50px, -3.5%, -3.5%)' }}
-            transition={{ duration: 0.35 }}
+            id={LAYOUT_CONSTANTS.LayoutInnerId}
           >
             {children}
-          </motion.main>
+          </main>
         </Suspense>
       </div>
     </div>
@@ -237,7 +249,7 @@ export default function Layout({ children }: LayoutProps) {
     }
   }
 
-  const refs = {
+  const refs = useRef({
     Layout: {
       ref: LayoutEl
     },
@@ -247,7 +259,7 @@ export default function Layout({ children }: LayoutProps) {
     LayoutWrapper: {
       ref: LayoutWrapperEl
     }
-  }
+  })
 
   useEffect(() => {
     const mode = getMode(prefersDarkMode)
@@ -262,11 +274,11 @@ export default function Layout({ children }: LayoutProps) {
         <LayoutContext.Provider
           value={{
             actions,
-            ...refs
+            ...refs.current
           }}
         >
           <MemoizedAnimation />
-          <MemoizedLayoutInner refs={refs}>
+          <MemoizedLayoutInner refs={refs.current}>
             <Stack style={{ display: animationPlayed ? 'flex' : 'none', width: '100%' }}>
               {children}
             </Stack>
