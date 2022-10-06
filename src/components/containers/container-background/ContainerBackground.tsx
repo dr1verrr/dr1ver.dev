@@ -1,10 +1,11 @@
-import { motion, MotionProps } from 'framer-motion'
-import React, { useRef } from 'react'
+import React from 'react'
 
-type BackgroundContainerProps = {
+type BackgroundContainerProps<T> = {
   WrapperComponent?: React.ComponentType | keyof JSX.IntrinsicElements
+  WrapperProps?: T extends React.ComponentType<infer Props> ? Props : never
+  BackgroundProps?: T extends React.ComponentType<infer Props> ? Props : never
+  BackgroundComponent?: React.ComponentType | keyof JSX.IntrinsicElements
   backgroundComponentId?: string
-  motionProps?: MotionProps
   wrapperId?: string
 }
 
@@ -13,26 +14,22 @@ const DEFAULTS = {
   backgroundComponentId: 'background-component'
 }
 
-export default function ContainerBackground({
+export default function ContainerBackground<
+  T extends React.ComponentType | JSX.IntrinsicElements
+>({
   WrapperComponent,
   wrapperId = DEFAULTS.wrapperId,
-  backgroundComponentId = DEFAULTS.backgroundComponentId,
-  motionProps
-}: BackgroundContainerProps) {
+  BackgroundComponent,
+  WrapperProps,
+  BackgroundProps,
+  backgroundComponentId = DEFAULTS.backgroundComponentId
+}: BackgroundContainerProps<T>) {
   const Wrapper = WrapperComponent || 'div'
-  const backgroundComponentRef = useRef<HTMLDivElement>(null)
+  const Background = BackgroundComponent || 'div'
 
   return (
-    <Wrapper id={wrapperId}>
-      <motion.div
-        ref={backgroundComponentRef}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        initial={{ opacity: 0 }}
-        transition={{ duration: 0.5 }}
-        {...motionProps}
-        id={backgroundComponentId}
-      ></motion.div>
+    <Wrapper id={wrapperId} {...WrapperProps}>
+      <Background id={backgroundComponentId} {...BackgroundProps}></Background>
     </Wrapper>
   )
 }
