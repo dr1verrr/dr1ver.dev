@@ -13,8 +13,7 @@ export default function FullscreenMediaBackground() {
   return (
     <ReactPortal wrapperId={LAYOUT_CONSTANTS.LayoutId}>
       <ContainerBackground
-        backgroundComponentId={CONSTANTS.ContainerBackground.backgroundComponentId}
-        motionProps={{
+        BackgroundProps={{
           style: {
             display: 'block',
             position: 'absolute',
@@ -27,6 +26,7 @@ export default function FullscreenMediaBackground() {
             pointerEvents: 'none'
           }
         }}
+        backgroundComponentId={CONSTANTS.ContainerBackground.backgroundComponentId}
         wrapperId={CONSTANTS.ContainerBackground.wrapperId}
       />
     </ReactPortal>
