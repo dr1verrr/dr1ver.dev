@@ -24,7 +24,6 @@ const useStyles = createUseStyles<
   | 'NavListElementLink'
   | 'HeaderLogo'
   | 'HeaderIcons'
-  | 'SocialButton'
   | '@media (max-width: 760px)',
   unknown,
   ColorScheme
@@ -104,47 +103,36 @@ const useStyles = createUseStyles<
     }
   }),
   Header: ({ theme }) => ({
+    zIndex: 500,
+    position: 'relative',
     background: theme.bg,
     fontSize: `clamp(14px, 0.75vw + 0.5vh, 0.75vw + 0.5vh)`,
     overflow: 'auto',
     borderRight: `0.03em solid ${rgba(theme.divider, 0.5)}`,
     display: 'flex',
-    flexDirection: 'column',
-    '&[data-type=menu-hidden]': {
-      '& $NavList': {
-        display: 'none'
-      }
-    },
-    '&[data-type=menu-visible]': {
-      '& $NavBar': {
-        flexDirection: 'column',
-        position: 'fixed',
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        zIndex: 1000
-      },
-      '& $NavList': {
-        display: 'flex',
-        flexDirection: 'column',
-        maxHeight: 'fit-content !important'
-      }
-    }
-  }),
-  SocialButton: ({ theme }) => ({
-    background: theme.bg,
-    border: `0.15em solid ${theme.divider}`,
-    color: theme.palette.lightContrast.color,
-    '& svg': {
-      fill: theme.palette.lightContrast.color
-    },
-    '&:hover': {
-      background: theme.hover,
-      borderColor: theme.color
-    }
+    flexDirection: 'column'
+    //'&[data-type=menu-hidden]': {
+    //  '& $NavList': {
+    //    display: 'none'
+    //  }
+    //},
+    //'&[data-type=menu-visible]': {
+    //  '& $NavBar': {
+    //    flexDirection: 'column',
+    //    position: 'fixed',
+    //    top: 0,
+    //    right: 0,
+    //    bottom: 0,
+    //    left: 0,
+    //    width: '100%',
+    //    height: '100%'
+    //  },
+    //  '& $NavList': {
+    //    display: 'flex',
+    //    flexDirection: 'column',
+    //    maxHeight: 'fit-content !important'
+    //  }
+    //}
   }),
   HeaderIcons: ({ theme }) => ({
     marginTop: 'auto',
@@ -198,7 +186,6 @@ const useStyles = createUseStyles<
 })
 
 export default function NavBar() {
-  const [menuVisible, setMenuVisible] = useState(false)
   const [mobileMenu, setMobileMenu] = useState(false)
   const [dimensionsChecked, setDimensionsChecked] = useState(false)
   const theme = useTheme()
@@ -247,12 +234,7 @@ export default function NavBar() {
   }, [mobileMenu])
 
   return (
-    <header
-      className={classes.Header}
-      {...(mobileMenu
-        ? { 'data-type': menuVisible ? 'menu-visible' : 'menu-hidden' }
-        : {})}
-    >
+    <header className={classes.Header}>
       <Box
         className={classes.HeaderLogo}
         data-type={location.pathname === '/' && 'focused'}
@@ -308,10 +290,8 @@ export default function NavBar() {
             target='_blank'
           >
             <Button
-              className={classes.SocialButton}
               icon={<sl.icon />}
               style={{ padding: '0.4em', borderRadius: '25%' }}
-              variant='primary'
             ></Button>
           </a>
         ))}

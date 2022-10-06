@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { CSSProperties, forwardRef, ReactNode } from 'react'
 import { createUseStyles } from 'react-jss'
 
-type StackProps = React.DetailedHTMLProps<
+export type StackProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
 > & {

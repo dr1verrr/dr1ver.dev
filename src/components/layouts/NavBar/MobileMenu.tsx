@@ -28,7 +28,7 @@ const useStyles = createUseStyles<
       bottom: 0,
       width: '100%',
       height: '100%',
-      zIndex: 1000,
+      zIndex: 3000,
       '& $Wrapper': {
         display: 'flex',
         flexDirection: 'column',
@@ -99,10 +99,17 @@ type MobileMenuProps = React.DetailedHTMLProps<
   HTMLElement
 > & {
   OpenButtonProps?: MenuIconProps
+  onClose?: (...args: any[]) => void
+  open?: boolean
 }
 
-export default function MobileMenu({ OpenButtonProps, ...props }: MobileMenuProps) {
-  const [isOpen, setOpen] = useState(false)
+export default function MobileMenu({
+  OpenButtonProps,
+  onClose,
+  open = false,
+  ...props
+}: MobileMenuProps) {
+  const [isOpen, setOpen] = useState(open)
   const theme = useTheme()
   const classes = useStyles({ theme })
 
@@ -136,7 +143,7 @@ export default function MobileMenu({ OpenButtonProps, ...props }: MobileMenuProp
       >
         <MenuIcon
           opened={isOpen}
-          size='clamp(50px, 3vw + 3vh, 3vw + 3vh)'
+          size='clamp(45px, 2.5vw + 2.5vh, 2.5vw + 2.5vh)'
           {...OpenButtonProps}
         />
       </Box>
@@ -144,7 +151,10 @@ export default function MobileMenu({ OpenButtonProps, ...props }: MobileMenuProp
         <nav className={classes.Menu} data-type={isOpen && 'opened'} {...props}>
           <div className={classes.Wrapper}>
             <Box className={classes.Close} onClick={handleClose}>
-              <MenuIcon opened={isOpen} size='clamp(50px, 3vw + 3vh, 3vw + 3vh)' />
+              <MenuIcon
+                opened={isOpen}
+                size='clamp(45px, 2.5vw + 2.5vh, 2.5vw + 2.5vh)'
+              />
             </Box>
             {isOpen && (
               <ul className={classes.List}>
