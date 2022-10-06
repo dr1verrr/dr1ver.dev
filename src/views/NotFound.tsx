@@ -64,7 +64,10 @@ export default function NotFound() {
             spacing='clamp(10px, 1vh, 1vh)'
             sx={{ alignItems: 'center', background: 'transparent' }}
           >
-            <Typography size='lg' sx={{ mixBlendMode: 'difference', fontWeight: 700 }}>
+            <Typography
+              size='lg'
+              sx={{ mixBlendMode: 'difference', fontWeight: 700, color: '#fff' }}
+            >
               404.
             </Typography>
             <Button
@@ -77,11 +80,8 @@ export default function NotFound() {
               Go back
             </Button>
           </Stack>
-          <Typography size='md' sx={{ mixBlendMode: 'difference', fontWeight: 300 }}>
-            There is nothing except of chips.
-          </Typography>
-          <Typography size='md' sx={{ mixBlendMode: 'difference', fontWeight: 300 }}>
-            Do you wanna some chips ?
+          <Typography size='md' sx={{ color: '#fff' }}>
+            Yup ?
           </Typography>
           <Video />
         </Stack>
