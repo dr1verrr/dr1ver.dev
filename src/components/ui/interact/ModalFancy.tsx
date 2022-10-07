@@ -10,7 +10,7 @@ export default function ModalFancy({ ModalProps, ...props }: ModalUIProps) {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          padding: 100
+          padding: 'clamp(15px, 1vw + 1vh, 1vw + 1vh)'
         }
       }}
       {...props}
