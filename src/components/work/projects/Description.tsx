@@ -12,12 +12,15 @@ const Description = ({ children }: { children?: ReactNode }) => {
   return (
     <Box
       sx={{
-        border: `0.1em solid ${theme.color}`,
+        border: `0.1em solid ${theme.palette.lightContrast.border}`,
         maxWidth: 'fit-content',
         padding: 'clamp(15px, 1vw + 1vh, 1vw + 1vh)'
       }}
     >
-      <Typography element='p' sx={{ fontWeight: 400 }}>
+      <Typography
+        element='p'
+        sx={{ fontWeight: 400, color: theme.palette.lightContrast.color }}
+      >
         {children}
       </Typography>
     </Box>
