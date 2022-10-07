@@ -1,5 +1,4 @@
-import { useInView } from 'framer-motion'
-import { createContext, lazy, useContext, useMemo, useRef } from 'react'
+import React, { createContext, lazy, useContext, useRef } from 'react'
 
 import {
   Box,
@@ -7,7 +6,6 @@ import {
   Stack,
   Typography as UITypography
 } from '@/components/shared'
-import { useLayoutContext } from '@/components/wrappers/Layout/Layout'
 import { adaptive } from '@/hoc'
 
 const Typography = adaptive(UITypography)
@@ -28,6 +26,10 @@ export type ProjectProps = {
     Component?: React.ComponentType
   }
   media?: {
+    dimensions: {
+      width: number
+      height: number
+    }
     Component?: React.ComponentType
   }
 }
@@ -36,7 +38,11 @@ const Header = lazy(() => import('./Header'))
 const Description = lazy(() => import('./Description'))
 const Media = lazy(() => import('./Media'))
 
-const ProjectContext = createContext({ inView: false })
+type TProjectContext = {
+  ProjectItemRef: React.RefObject<HTMLDivElement>
+}
+
+const ProjectContext = createContext<TProjectContext>({} as TProjectContext)
 
 const useProjectContext = () => useContext(ProjectContext)
 
@@ -44,11 +50,9 @@ export { ProjectContext, useProjectContext }
 
 const Project = ({ description, features, header, media }: ProjectProps) => {
   const BoxRef = useRef(null)
-  const { Layout } = useLayoutContext()
-  const inView = useInView(BoxRef, { root: Layout.ref, margin: '-25%' })
 
-  const MemoizedProjectInner = useMemo(
-    () => (
+  return (
+    <ProjectContext.Provider value={{ ProjectItemRef: BoxRef }}>
       <Box ref={BoxRef}>
         <Stack direction='column' spacing='clamp(10px, 1vh, 1vh)'>
           {header && (
@@ -75,17 +79,12 @@ const Project = ({ description, features, header, media }: ProjectProps) => {
               </Highlighted>
             </Typography>
             {features?.Component && <features.Component />}
-            {media && media.Component && <Media MediaComponent={media.Component} />}
+            {media && media.Component && (
+              <Media MediaComponent={media.Component} dimensions={media.dimensions} />
+            )}
           </Box>
         </Stack>
       </Box>
-    ),
-    [description, features, header, media]
-  )
-
-  return (
-    <ProjectContext.Provider value={{ inView }}>
-      {MemoizedProjectInner}
     </ProjectContext.Provider>
   )
 }

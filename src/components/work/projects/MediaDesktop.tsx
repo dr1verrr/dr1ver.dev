@@ -1,8 +1,10 @@
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion, useInView } from 'framer-motion'
+import { useMemo } from 'react'
 import { createUseStyles } from 'react-jss'
 
 import ReactPortal from '@/components/helpers/ReactPortal'
 import { Box } from '@/components/shared'
+import { useLayoutContext } from '@/components/wrappers/Layout'
 import { useTheme } from '@/theme/hooks'
 import { ColorScheme } from '@/theme/types'
 import { rgba } from '@/utils/styles'
@@ -57,27 +59,34 @@ const useStyles = createUseStyles<
 }))
 
 const MediaDesktop = ({ MediaComponent }: { MediaComponent: React.ComponentType }) => {
-  const { inView } = useProjectContext()
+  const { ProjectItemRef } = useProjectContext()
+  const { Layout } = useLayoutContext()
+  const inView = useInView(ProjectItemRef, { root: Layout.ref, margin: '-25%' })
   const theme = useTheme()
   const classes = useStyles({ theme })
+
+  const memoizedMedia = useMemo(() => <MediaComponent />, [MediaComponent])
+
+  const memoizedBackground = useMemo(
+    () => (
+      <motion.div
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        initial={{ opacity: 0 }}
+        transition={{ duration: 0.35, delay: 0.05 }}
+      >
+        <Box className={classes.MediaBackground}>{memoizedMedia}</Box>
+      </motion.div>
+    ),
+    [inView]
+  )
 
   return (
     <>
       <ReactPortal wrapperId={CONSTANTS.ContainerBackground.backgroundComponentId}>
-        {inView && (
-          <motion.div
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            initial={{ opacity: 0 }}
-            transition={{ duration: 0.35, delay: 0.05 }}
-          >
-            <Box className={classes.MediaBackground}>
-              <MediaComponent />
-            </Box>
-          </motion.div>
-        )}
+        <AnimatePresence>{inView && memoizedBackground}</AnimatePresence>
       </ReactPortal>
-      <MediaComponent />
+      {memoizedMedia}
     </>
   )
 }
