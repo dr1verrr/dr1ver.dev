@@ -6,11 +6,15 @@ import MediaContent from './MediaContent'
 
 type MediaProps = {
   MediaComponent: React.ComponentType
+  dimensions: {
+    width: number
+    height: number
+  }
 }
 
 const MediaDesktop = lazy(() => import('./MediaDesktop'))
 
-export default function Media({ MediaComponent }: MediaProps) {
+export default function Media({ MediaComponent, dimensions }: MediaProps) {
   const isMobile = useMediaQuery('(max-width: 460px)')
 
   return (

@@ -18,6 +18,10 @@ const data_projects: ProjectProps[] = [
       title: 'speedtyper.dev'
     },
     media: {
+      dimensions: {
+        width: 1920,
+        height: 1080
+      },
       Component: () => (
         <VideoContent src='https://user-images.githubusercontent.com/67706933/190857521-fa1d4098-30c0-4a6e-9d13-ef45ac70c1e5.mp4' />
       )
@@ -108,6 +112,10 @@ const data_projects: ProjectProps[] = [
       title: 'React Hook Manager'
     },
     media: {
+      dimensions: {
+        width: 1920,
+        height: 1080
+      },
       Component: () => (
         <VideoContent src='https://user-images.githubusercontent.com/67706933/191988615-9c17a9b7-9055-495e-a7bb-c29c4b75ebe4.mp4' />
       )
@@ -156,6 +164,10 @@ const data_projects: ProjectProps[] = [
       title: 'Dr1ver.shop'
     },
     media: {
+      dimensions: {
+        width: 1920,
+        height: 1080
+      },
       Component: () => (
         <VideoContent src='https://user-images.githubusercontent.com/67706933/191988779-f0bbd2ae-15b8-4215-be3f-5d577e265572.mp4' />
       )
