@@ -75,7 +75,7 @@ export default function Main() {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      border: `0.3em solid ${theme.divider}`
+                      border: `0.2em solid ${theme.divider}`
                     }}
                   >
                     <img
@@ -116,7 +116,7 @@ export default function Main() {
                     tabIndex={-1}
                     to={ROUTES.Work.path}
                   >
-                    <Button className={classes.ViewWork} size='md' variant='secondary'>
+                    <Button className={classes.ViewWork} size='md'>
                       View my work
                     </Button>
                   </Link>

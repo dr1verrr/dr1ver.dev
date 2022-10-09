@@ -47,7 +47,7 @@ export default function Projects() {
           width: '100%',
           position: 'relative',
           zIndex: 50,
-          background: rgba(theme.bg, 0.5),
+          background: rgba(theme.bg, 0.7),
           padding: '0 clamp(15px, 2vw + 2vh, 2vw + 2vh)',
           border: `0.1em solid ${theme.divider}`,
           borderTop: 0,
