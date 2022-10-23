@@ -21,7 +21,7 @@ import {
   Typography as UITypography
 } from '@/components/shared'
 import adaptive from '@/hoc/adaptive'
-import { useTheme } from '@/theme/hooks'
+import { useTheme } from '@/components/wrappers/Layout/theme'
 import { ColorScheme } from '@/theme/types'
 
 const Typography = adaptive(UITypography)

@@ -5,7 +5,7 @@ import { createUseStyles } from 'react-jss'
 import ReactPortal from '@/components/helpers/ReactPortal'
 import { Box } from '@/components/shared'
 import { useLayoutContext } from '@/components/wrappers/Layout'
-import { useTheme } from '@/theme/hooks'
+import { useTheme } from '@/components/wrappers/Layout/theme'
 import { ColorScheme } from '@/theme/types'
 import { rgba } from '@/utils/styles'
 

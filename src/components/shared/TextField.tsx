@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { forwardRef } from 'react'
 import { createUseStyles } from 'react-jss'
 
-import { useTheme } from '@/theme/hooks'
+import { useTheme } from '@/components/wrappers/Layout/theme'
 import { ColorScheme } from '@/theme/types'
 
 interface TextFieldProps

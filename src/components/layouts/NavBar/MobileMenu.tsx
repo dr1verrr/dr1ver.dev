@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom'
 
 import Box from '@/components/shared/Box'
 import MenuIcon, { MenuIconProps } from '@/components/ui/navigation/Menu'
-import { useTheme } from '@/theme/hooks'
+import { useTheme } from '@/components/wrappers/Layout/theme'
 import { ColorScheme } from '@/theme/types'
 import { rgba } from '@/utils/styles'
 

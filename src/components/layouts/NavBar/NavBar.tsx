@@ -5,8 +5,9 @@ import { NavLink, useLocation } from 'react-router-dom'
 import Box from '@/components/shared/Box'
 import UIButton from '@/components/shared/Button'
 import Stack from '@/components/shared/Stack'
+import { useTheme } from '@/components/wrappers/Layout/theme'
+import ThemeSwitcher from '@/features/theme/ThemeSwitcher'
 import adaptive from '@/hoc/adaptive'
-import { useTheme } from '@/theme/hooks'
 import { ColorScheme } from '@/theme/types'
 import { rgba } from '@/utils/styles'
 
@@ -111,28 +112,6 @@ const useStyles = createUseStyles<
     borderRight: `0.03em solid ${rgba(theme.divider, 0.5)}`,
     display: 'flex',
     flexDirection: 'column'
-    //'&[data-type=menu-hidden]': {
-    //  '& $NavList': {
-    //    display: 'none'
-    //  }
-    //},
-    //'&[data-type=menu-visible]': {
-    //  '& $NavBar': {
-    //    flexDirection: 'column',
-    //    position: 'fixed',
-    //    top: 0,
-    //    right: 0,
-    //    bottom: 0,
-    //    left: 0,
-    //    width: '100%',
-    //    height: '100%'
-    //  },
-    //  '& $NavList': {
-    //    display: 'flex',
-    //    flexDirection: 'column',
-    //    maxHeight: 'fit-content !important'
-    //  }
-    //}
   }),
   HeaderIcons: ({ theme }) => ({
     marginTop: 'auto',
@@ -280,21 +259,27 @@ export default function NavBar() {
           </ul>
         </nav>
       )}
-      <Stack className={classes.HeaderIcons} spacing='clamp(10px, 0.5em, 0.5em)'>
-        {socialLinks.map((sl, idx) => (
-          <a
-            key={idx}
-            href={sl.link}
-            style={{ borderRadius: '25%' }}
-            tabIndex={-1}
-            target='_blank'
-          >
-            <Button
-              icon={<sl.icon />}
-              style={{ padding: '0.4em', borderRadius: '25%' }}
-            ></Button>
-          </a>
-        ))}
+
+      <Stack direction='column' spacing='1.5em'>
+        <Box sx={{ padding: '1em' }}>
+          <ThemeSwitcher />
+        </Box>
+        <Stack className={classes.HeaderIcons} spacing='clamp(10px, 0.5em, 0.5em)'>
+          {socialLinks.map((sl, idx) => (
+            <a
+              key={idx}
+              href={sl.link}
+              style={{ borderRadius: '25%' }}
+              tabIndex={-1}
+              target='_blank'
+            >
+              <Button
+                icon={<sl.icon />}
+                style={{ padding: '0.4em', borderRadius: '25%' }}
+              ></Button>
+            </a>
+          ))}
+        </Stack>
       </Stack>
     </header>
   )

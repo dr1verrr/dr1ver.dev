@@ -9,7 +9,7 @@ import UIButton from '@/components/shared/Button'
 import Container from '@/components/shared/Container'
 import UITypography from '@/components/shared/Typography'
 import adaptive from '@/hoc/adaptive'
-import { useTheme } from '@/theme/hooks'
+import { useTheme } from '@/components/wrappers/Layout/theme'
 import { ColorScheme } from '@/theme/types'
 
 const Button = adaptive(UIButton)

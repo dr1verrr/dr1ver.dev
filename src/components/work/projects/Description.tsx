@@ -1,8 +1,8 @@
 import { ReactNode } from 'react'
 
 import { Box, Typography as UITypography } from '@/components/shared'
+import { useTheme } from '@/components/wrappers/Layout/theme'
 import { adaptive } from '@/hoc'
-import { useTheme } from '@/theme/hooks'
 
 const Typography = adaptive(UITypography)
 

@@ -9,14 +9,12 @@ import React, {
   useRef,
   useState
 } from 'react'
-import { createTheming, createUseStyles, JssProvider } from 'react-jss'
+import { createUseStyles, JssProvider } from 'react-jss'
 
-import { Box, Button, Stack } from '@/components/shared'
+import { Box, Button } from '@/components/shared'
 import useMediaQuery from '@/hooks/useMediaQuery'
 import { jss } from '@/services/jss'
 import { LocalStorageKey, LocalStorageKey as LSThemeKey } from '@/theme/constants'
-import { useTheme } from '@/theme/hooks'
-import { lightScheme } from '@/theme/scheme'
 import { ColorScheme } from '@/theme/types'
 import { loadState, saveState } from '@/utils/localStorage'
 import { rgba } from '@/utils/styles'
@@ -26,16 +24,12 @@ import NavBar from '../../layouts/NavBar'
 import Spinner from '../../ui/lazyload/Spinner'
 import { getMode, getTheme } from '../helpers'
 import { LAYOUT_CONSTANTS } from './constants'
+import { ThemeProvider, useTheme } from './theme'
 
 type LayoutProps = {
   children?: React.ReactNode
 }
 
-const ThemeContext = React.createContext<ColorScheme>(lightScheme)
-const theming = createTheming(ThemeContext)
-const { ThemeProvider } = theming
-
-export { jss, ThemeContext }
 export { useLayoutContext }
 
 const useStyles = createUseStyles<
@@ -237,18 +231,12 @@ export default function Layout({ children }: LayoutProps) {
 
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
   const [theme, setTheme] = useState<ColorScheme>(getTheme(loadState(LSThemeKey)))
+  console.log('theme', theme.mode)
   const [animationPlayed, setAnimationPlayed] = useState(false)
 
   const switchTheme = useCallback(() => {
     setTheme(getTheme(theme.mode === 'dark' ? 'light' : 'dark'))
   }, [theme])
-
-  const actions = {
-    switchTheme,
-    animationPlayed: {
-      set: setAnimationPlayed
-    }
-  }
 
   const refs = useRef({
     Layout: {
@@ -274,15 +262,21 @@ export default function Layout({ children }: LayoutProps) {
       <ThemeProvider theme={theme}>
         <LayoutContext.Provider
           value={{
-            actions,
+            actions: {
+              animationPlayed: {
+                set: setAnimationPlayed
+              },
+              switchTheme
+            },
             ...refs.current
           }}
         >
-          <MemoizedAnimation />
+          {/*<MemoizedAnimation />*/}
           <MemoizedLayoutInner refs={refs.current}>
-            <Stack style={{ display: animationPlayed ? 'flex' : 'none', width: '100%' }}>
+            {/*<Stack style={{ display: animationPlayed ? 'flex' : 'none', width: '100%' }}>
               {children}
-            </Stack>
+            </Stack>*/}
+            {children}
           </MemoizedLayoutInner>
         </LayoutContext.Provider>
       </ThemeProvider>

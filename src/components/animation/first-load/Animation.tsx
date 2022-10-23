@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import { createUseStyles } from 'react-jss'
 
 import { useLayoutContext } from '@/components/wrappers/Layout'
-import { useTheme } from '@/theme/hooks'
+import { useTheme } from '@/components/wrappers/Layout/theme'
 import { ColorScheme } from '@/theme/types'
 
 import Logo from './Logo'

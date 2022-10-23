@@ -9,7 +9,7 @@ import Project from '@/components/work/projects'
 import { ProjectProps } from '@/components/work/projects/Project'
 import data_projects from '@/data/work/projects'
 import { adaptive } from '@/hoc'
-import { useTheme } from '@/theme/hooks'
+import { useTheme } from '@/components/wrappers/Layout/theme'
 import { rgba } from '@/utils/styles'
 
 const Typography = adaptive(UITypography)

@@ -1,13 +1,11 @@
 import { darkScheme, lightScheme } from '@/theme/scheme'
 
 const getTheme = (mode: 'dark' | 'light') => {
-  switch (mode) {
-    case 'dark':
-      return darkScheme
-
-    default:
-      return lightScheme
+  if (mode === 'dark') {
+    return darkScheme
   }
+
+  return lightScheme
 }
 
 const getMode = (isPreferDarkMode: boolean) => (isPreferDarkMode ? 'dark' : 'light')

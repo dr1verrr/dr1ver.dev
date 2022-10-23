@@ -3,7 +3,7 @@ import { createUseStyles } from 'react-jss'
 
 import { Box, Button, Stack } from '@/components/shared'
 import ModalFancy from '@/components/ui/interact/ModalFancy'
-import { useTheme } from '@/theme/hooks'
+import { useTheme } from '@/components/wrappers/Layout/theme'
 import { ColorScheme } from '@/theme/types'
 
 const useStyles = createUseStyles<'MediaContentInner', unknown, ColorScheme>(theme => ({

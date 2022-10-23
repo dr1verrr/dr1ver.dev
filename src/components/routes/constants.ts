@@ -4,6 +4,7 @@ const Projects = lazy(() => import('@/views/Projects'))
 const Skills = lazy(() => import('@/views/Skills'))
 const About = lazy(() => import('@/views/About'))
 const Contact = lazy(() => import('@/views/Contact'))
+const Test = lazy(() => import('@/views/Test'))
 
 const ROUTES = {
   About: {
@@ -21,6 +22,10 @@ const ROUTES = {
   Contact: {
     element: Contact,
     path: '/contact'
+  },
+  Test: {
+    element: Test,
+    path: '/test'
   }
 }
 

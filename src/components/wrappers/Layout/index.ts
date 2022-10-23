@@ -1,7 +1,5 @@
-import Layout, { ThemeContext, useLayoutContext } from './Layout'
+import Layout, { useLayoutContext } from './Layout'
 
 export { useLayoutContext }
-
-export { ThemeContext }
 
 export default Layout

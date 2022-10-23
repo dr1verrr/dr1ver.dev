@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import React, { createElement, ReactNode } from 'react'
 import { createUseStyles } from 'react-jss'
 
-import { useTheme } from '@/theme/hooks'
+import { useTheme } from '@/components/wrappers/Layout/theme'
 import { ColorScheme } from '@/theme/types'
 
 const DEFAULT_VARIANT = 'body'
