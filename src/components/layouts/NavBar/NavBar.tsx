@@ -6,7 +6,6 @@ import Box from '@/components/shared/Box'
 import UIButton from '@/components/shared/Button'
 import Stack from '@/components/shared/Stack'
 import { useTheme } from '@/components/wrappers/Layout/theme'
-import ThemeSwitcher from '@/features/theme/ThemeSwitcher'
 import adaptive from '@/hoc/adaptive'
 import { ColorScheme } from '@/theme/types'
 import { rgba } from '@/utils/styles'
@@ -260,26 +259,21 @@ export default function NavBar() {
         </nav>
       )}
 
-      <Stack direction='column' spacing='1.5em'>
-        <Box sx={{ padding: '1em' }}>
-          <ThemeSwitcher />
-        </Box>
-        <Stack className={classes.HeaderIcons} spacing='clamp(10px, 0.5em, 0.5em)'>
-          {socialLinks.map((sl, idx) => (
-            <a
-              key={idx}
-              href={sl.link}
-              style={{ borderRadius: '25%' }}
-              tabIndex={-1}
-              target='_blank'
-            >
-              <Button
-                icon={<sl.icon />}
-                style={{ padding: '0.4em', borderRadius: '25%' }}
-              ></Button>
-            </a>
-          ))}
-        </Stack>
+      <Stack className={classes.HeaderIcons} spacing='clamp(10px, 0.5em, 0.5em)'>
+        {socialLinks.map((sl, idx) => (
+          <a
+            key={idx}
+            href={sl.link}
+            style={{ borderRadius: '25%' }}
+            tabIndex={-1}
+            target='_blank'
+          >
+            <Button
+              icon={<sl.icon />}
+              style={{ padding: '0.4em', borderRadius: '25%' }}
+            ></Button>
+          </a>
+        ))}
       </Stack>
     </header>
   )
