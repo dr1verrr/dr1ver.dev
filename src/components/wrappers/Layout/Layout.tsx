@@ -11,7 +11,7 @@ import React, {
 } from 'react'
 import { createUseStyles, JssProvider } from 'react-jss'
 
-import { Box, Button } from '@/components/shared'
+import { Box, Button, Stack } from '@/components/shared'
 import useMediaQuery from '@/hooks/useMediaQuery'
 import { jss } from '@/services/jss'
 import { LocalStorageKey, LocalStorageKey as LSThemeKey } from '@/theme/constants'
@@ -271,12 +271,11 @@ export default function Layout({ children }: LayoutProps) {
             ...refs.current
           }}
         >
-          {/*<MemoizedAnimation />*/}
+          <MemoizedAnimation />
           <MemoizedLayoutInner refs={refs.current}>
-            {/*<Stack style={{ display: animationPlayed ? 'flex' : 'none', width: '100%' }}>
+            <Stack style={{ display: animationPlayed ? 'flex' : 'none', width: '100%' }}>
               {children}
-            </Stack>*/}
-            {children}
+            </Stack>
           </MemoizedLayoutInner>
         </LayoutContext.Provider>
       </ThemeProvider>
