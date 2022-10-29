@@ -8,8 +8,8 @@ import { Box, Stack } from '@/components/shared'
 import UIButton from '@/components/shared/Button'
 import Container from '@/components/shared/Container'
 import UITypography from '@/components/shared/Typography'
-import adaptive from '@/hoc/adaptive'
 import { useTheme } from '@/components/wrappers/Layout/theme'
+import adaptive from '@/hoc/adaptive'
 import { ColorScheme } from '@/theme/types'
 
 const Button = adaptive(UIButton)
@@ -58,7 +58,11 @@ export default function Main() {
             <Stack direction='column' spacing='clamp(10px, 1vh, 1vh)'>
               <Stack
                 spacing='clamp(20px, 0.75vw + 0.75vh, 0.75vw + 0.75vh)'
-                sx={{ flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}
+                sx={{
+                  flexWrap: 'wrap',
+                  alignItems: 'flex-start',
+                  justifyContent: 'center'
+                }}
               >
                 <Container
                   style={{
@@ -68,9 +72,9 @@ export default function Main() {
                 >
                   <Box
                     style={{
-                      maxWidth: 'clamp(300px, 20vw, 20vw)',
+                      maxWidth: 'clamp(300px, 25vw, 25vw)',
                       background: theme.bg,
-                      borderRadius: '100%',
+                      borderRadius: '2em',
                       overflow: 'hidden',
                       display: 'flex',
                       alignItems: 'center',
@@ -83,8 +87,8 @@ export default function Main() {
                       src={Photo}
                       style={{
                         maxWidth: '100%',
-                        maxHeight: '100%',
-                        height: '100%'
+                        height: '100%',
+                        objectFit: 'cover'
                       }}
                     />
                   </Box>
