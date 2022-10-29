@@ -72,14 +72,14 @@ export default function Main() {
                 >
                   <Box
                     style={{
-                      maxWidth: 'clamp(300px, 25vw, 25vw)',
+                      maxWidth: 'clamp(450px, 25vw, 25vw)',
                       background: theme.bg,
                       borderRadius: '2em',
                       overflow: 'hidden',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      border: `0.2em solid ${theme.divider}`
+                      border: `0.1em solid ${theme.divider}`
                     }}
                   >
                     <img
@@ -88,7 +88,7 @@ export default function Main() {
                       style={{
                         maxWidth: '100%',
                         height: '100%',
-                        objectFit: 'cover'
+                        transform: 'scale(1.5)'
                       }}
                     />
                   </Box>
