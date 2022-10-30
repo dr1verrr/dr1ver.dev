@@ -7,9 +7,9 @@ import ListScrollable from '@/components/shared/ListScrollable'
 import SpinnerCircle from '@/components/spinners/SpinnerCircle'
 import Project from '@/components/work/projects'
 import { ProjectProps } from '@/components/work/projects/Project'
+import { useTheme } from '@/components/wrappers/Layout/theme'
 import data_projects from '@/data/work/projects'
 import { adaptive } from '@/hoc'
-import { useTheme } from '@/components/wrappers/Layout/theme'
 import { rgba } from '@/utils/styles'
 
 const Typography = adaptive(UITypography)

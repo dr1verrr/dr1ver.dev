@@ -18,7 +18,7 @@ export default function Media({ MediaComponent, dimensions }: MediaProps) {
   const isMobile = useMediaQuery('(max-width: 460px)')
 
   return (
-    <MediaContent>
+    <MediaContent mobile={isMobile}>
       {!isMobile ? <MediaDesktop MediaComponent={MediaComponent} /> : <MediaComponent />}
     </MediaContent>
   )
