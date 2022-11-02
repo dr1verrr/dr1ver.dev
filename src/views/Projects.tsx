@@ -81,7 +81,7 @@ export default function Projects() {
                   alignItems: 'center'
                 }}
               >
-                <SpinnerCircle lineWidth='0.4vw' size='2vw + 2vh' />
+                <SpinnerCircle lineWidth='0.4vw' size='1vw + 1vh' />
               </Box>
             }
             render={(props, idx) => <MemoizedProjectItem {...props} key={idx} />}
