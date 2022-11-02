@@ -77,8 +77,8 @@ const palettes = {
       border: '#333',
       hover: {
         bg: '#fff',
-        color: '#5D3FD3',
-        border: '#5D3FD3'
+        color: '#333',
+        border: '#333'
       }
     },
     action: {
@@ -152,7 +152,8 @@ const buttonPalette = {
     action: palettes.light.action,
     'action.secondary': palettes.light['action.secondary'],
     info: palettes.light.info,
-    'info.secondary': palettes.light['info.secondary']
+    'info.secondary': palettes.light['info.secondary'],
+    lightContrast: palettes.light['lightContrast']
   },
   dark: {
     primary: palettes.dark.primary,
@@ -160,7 +161,8 @@ const buttonPalette = {
     action: palettes.dark.action,
     'action.secondary': palettes.dark['action.secondary'],
     info: palettes.dark.info,
-    'info.secondary': palettes.dark['info.secondary']
+    'info.secondary': palettes.dark['info.secondary'],
+    lightContrast: palettes.dark['lightContrast']
   }
 }
 

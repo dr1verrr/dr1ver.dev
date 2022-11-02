@@ -47,6 +47,7 @@ type ColorScheme = {
     primary: ButtonScheme
     info: ButtonScheme
     secondary: ButtonScheme
+    lightContrast: ButtonScheme
     'action.secondary': ButtonScheme
     'info.secondary': ButtonScheme
   }

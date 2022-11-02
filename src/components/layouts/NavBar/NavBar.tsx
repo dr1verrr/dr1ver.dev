@@ -271,6 +271,7 @@ export default function NavBar() {
             <Button
               icon={<sl.icon />}
               style={{ padding: '0.4em', borderRadius: '25%' }}
+              variant='lightContrast'
             ></Button>
           </a>
         ))}
