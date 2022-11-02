@@ -30,14 +30,14 @@ const Links = ({
     >
       {githubLink && (
         <a href={githubLink} tabIndex={-1} target='_blank' {...LinkProps}>
-          <Button icon={<IconGithub />} variant='action.secondary' {...ButtonProps}>
+          <Button icon={<IconGithub />} variant='lightContrast' {...ButtonProps}>
             Github
           </Button>
         </a>
       )}
       {appLink && (
         <a href={appLink} tabIndex={-1} target='_blank' {...LinkProps}>
-          <Button variant='action.secondary' {...ButtonProps} style={{ height: '100%' }}>
+          <Button variant='lightContrast' {...ButtonProps} style={{ height: '100%' }}>
             Application
           </Button>
         </a>
